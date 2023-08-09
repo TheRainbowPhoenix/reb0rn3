@@ -1,0 +1,10 @@
+{
+  "name": "Let the V3 be reborn",
+  "short_name": "Re3",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml"
+    }
+  ]
+}
