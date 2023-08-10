@@ -9,10 +9,21 @@ import RTFFragment from "../core/components/RTFFragment.svelte";
 import RTBlock from "../core/components/RTBlock.astro";
 import EditorToolbar from "../cms/components/EditorToolbar.svelte";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import BaseWidget from "../core/components/base/BaseWidget.svelte";
+import SectionList from "../core/components/SectionList.svelte";
+import DropWidgetZone from "../core/components/DropWidgetZone.svelte";
 
 // import { a as AReff } from "./r/a.re3";
 
 const locals = Astro.locals;
+
+const astro = {
+  locals: Astro.locals,
+};
+
+locals.cms.widgets = {
+  // load: await Astro.glob("../core/widgets/*.astro"),
+};
 
 const cms = locals.cms;
 ---
@@ -24,7 +35,7 @@ const cms = locals.cms;
   </head>
   <body>
     <!-- <Header title={SITE_TITLE} /> -->
-    <EditorToolbar client:load />
+    <EditorToolbar client:load {astro} />
     <MyCounter name="number" count={cms.kv.get("number")} client:load />
     <!-- <p>{JSON.stringify(locals)} - {cms || "cms KO"} - {cms.kv.get("number")}</p> -->
     <main class="site">
@@ -32,6 +43,8 @@ const cms = locals.cms;
         <PlainText name="title" content={cms.kv.get("title")} client:load />
       </h1>
       <PlainText name="changeme" content={cms.kv.get("changeme")} client:load />
+
+      <BaseWidget name="baseTest" content="change base Test" client:load />
 
       <RTBlock
         name="welcome"
@@ -86,6 +99,10 @@ const cms = locals.cms;
           </a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
         </p>
       </RTBlock>
+
+      <SectionList name="sectionsListOne" client:visible />
+
+      <DropWidgetZone client:load />
     </main>
   </body>
 </html>

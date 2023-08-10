@@ -8,3 +8,6 @@ import { writable } from "svelte/store";
 
 /** @type {WritableEditorView} */
 export const currentEditorView = writable(undefined);
+
+/** @type {WritableAny} */
+export const selectedElementChannel = writable(null);

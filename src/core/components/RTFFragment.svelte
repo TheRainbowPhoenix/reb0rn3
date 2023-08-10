@@ -13,7 +13,6 @@
   let mounted = false;
 
   onMount(async () => {
-    console.log(content);
     if (!content) {
       content = (base && base.querySelector("astro-slot")?.innerHTML) || "";
       if (content) {
@@ -23,7 +22,6 @@
     } else {
       mounted = true;
     }
-    console.log(content);
     // content = callback();
   });
 </script>

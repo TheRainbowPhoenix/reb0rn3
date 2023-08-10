@@ -8,14 +8,23 @@
     const event = new CustomEvent("cms_edit", { detail: isCmsEditOn });
     dispatchEvent(event);
   };
+
+  /**
+   * @typedef {import('astro').AstroGlobal}  AstroGlobal
+   */
+
+  /**
+   * @type {Readonly<AstroGlobal>}
+   */
+  export let astro;
 </script>
 
 <div id="editor-base">
   {#if isCmsEditOn}
     {#await import("./EditorPanel.svelte")}
-      Loading ...
+      <div class="re-load-spacer">Loading ...</div>
     {:then EditorPanel}
-      <EditorPanel.default />
+      <EditorPanel.default {astro} />
     {:catch error}
       <p style="color: red">RE 3 Error : {error.message}</p>
     {/await}

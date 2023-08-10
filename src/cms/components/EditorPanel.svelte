@@ -3,8 +3,18 @@
   import { onMount } from "svelte";
   import PanelHeader from "./EditorPanel/PanelHeader.svelte";
   import PanelMain from "./EditorPanel/PanelMain.svelte";
+  import { getAllWidgets } from "../../core/utils/widgets";
 
   export let visible = true;
+
+  /**
+   * @typedef {import('astro').AstroGlobal}  AstroGlobal
+   */
+
+  /**
+   * @type {Readonly<AstroGlobal>}
+   */
+  export let astro;
 
   /**
    * @param {any} event - The `cms_edit` custom event
@@ -21,17 +31,19 @@
     };
   });
 
-  async function simulateLoading() {
-    // The idea is to cache the non-critical data to a store for later re-use
-    await new Promise((resolve) =>
-      setTimeout(() => resolve({ data: "sample" }), 2500)
-    ); // Simulate loading delay
+  async function dataLoading() {
+    const widgets = await getAllWidgets();
+
+    return {
+      widgets,
+      data: "sample",
+    };
   }
 </script>
 
 <aside class="re-panel" id="re-editor-suspense" class:visible>
   <div id="re-panel-inner">
-    {#await simulateLoading()}
+    {#await dataLoading()}
       <div id="re-panel-state-loading">
         <svg
           class="animation-glow"

@@ -102,6 +102,26 @@
   );
   --scrollbar-auto-scrollbar-color-thumb: #202225;
   --scrollbar-auto-scrollbar-color-track: #2f3136;
+
+  --e-p-draggable-color: #f0abfc;
+  --e-p-border-section: #f3bafd;
+  --e-p-border-section-hover: #f0abfc;
+  --e-p-border-section-invert: #0c0d0e;
+  --e-p-border-con: #f3bafd;
+  --e-p-border-con-hover: #f0abfc;
+  --e-p-border-con-invert: #0c0d0e;
+  --e-p-border-column: #9da5ae;
+  --e-p-border-column-hover: #818a96;
+  --e-p-border-column-invert: #0c0d0e;
+  --e-p-border-con-in: #9da5ae;
+  --e-p-border-con-in-hover: #818a96;
+  --e-p-border-con-in-invert: #0c0d0e;
+  --e-p-border-widget: #f3bafd;
+  --e-p-border-widget-hover: #f0abfc;
+  --e-p-border-widget-invert: #0c0d0e;
+  --e-p-border-global: #5eead4;
+  --e-p-border-global-hover: #1dddbf;
+  --e-p-border-global-invert: #0c0d0e;
 }
 
 /* Why is editor broken ?? */
