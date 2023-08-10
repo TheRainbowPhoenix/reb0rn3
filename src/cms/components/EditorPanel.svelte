@@ -3,7 +3,8 @@
   import { onMount } from "svelte";
   import PanelHeader from "./EditorPanel/PanelHeader.svelte";
   import PanelMain from "./EditorPanel/PanelMain.svelte";
-  import { getAllWidgets } from "../../core/utils/widgets";
+  import { getAllWidgets, getWidgetsMap } from "../../core/utils/widgets";
+  import { widgetsMap } from "../../core/stores";
 
   export let visible = true;
 
@@ -32,7 +33,11 @@
   });
 
   async function dataLoading() {
-    const widgets = await getAllWidgets();
+    // const widgets = await getAllWidgets();
+    const widgets = await getWidgetsMap();
+
+    console.log(widgets);
+    widgetsMap.set(widgets);
 
     return {
       widgets,
@@ -65,7 +70,16 @@
       </div>
     {:then data}
       <PanelHeader />
-      <PanelMain {data} />
+      <!-- {JSON.stringify(data.widgets)} -->
+      {#each Object.values(data.widgets) as widget}
+        <!-- {#await import(widget.path)}
+          loading ...
+        {:then WidgetClass}
+          <WidgetClass.default />
+        {/await} -->
+        <!-- {JSON.stringify(widget.path)} -->
+      {/each}
+      <PanelMain {data} widgets={data.widgets} />
     {/await}
   </div>
 </aside>

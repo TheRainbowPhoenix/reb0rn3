@@ -12,8 +12,13 @@
    */
   export let data = { data: "todo" };
 
+  /**
+   * @type {Record<string, any>}
+   */
+  export let widgets = [];
+
   selectedElementChannel.subscribe((value) => {
-    console.log(`element:selected - ${value ? value.meta.name : null}`);
+    console.log(`element:selected - ${value}`);
   });
 
   // const dummyWidget = {
@@ -23,12 +28,11 @@
 
   onMount(() => {
     console.log(data);
+    console.log("widgets");
+    console.log(widgets);
   });
 
-  // const widgets = Array.from(Array(42)).map((_, x) => ({
-  //   name: `Widget ${x}`,
-  //   data: dummyWidget,
-  // }));
+  // TODO: mapReduce widgets to order them by categories
 </script>
 
 <main id="re-panel-content-wrapper">
@@ -38,68 +42,68 @@
     </div>
     <div class="re-panel-elements-wrapper scroller thin">
       {#if data.widgets}
-        {#each Object.entries(data.widgets) as [category, widgets]}
-          <button class="re-panel-heading re-panel-category-title">
-            <span>{category}</span>
-          </button>
-          <ul class="re-panel-elements-list">
-            {#each widgets as widget}
-              <li
-                class="re-element-wrapper"
-                draggable="true"
-                on:dragstart={(e) => selectedElementChannel.set(widget.default)}
-              >
-                {#await widget.icon}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    class="re-element-icon"
-                    ><path
-                      fill="currentColor"
-                      fill-rule="evenodd"
-                      d="M10.47 3.554a4 4 0 1 1 3.06 7.391a4 4 0 0 1-3.06-7.39ZM12 4.75a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5Zm-6.53 7.805a4 4 0 1 1 3.061 7.391a4 4 0 0 1-3.062-7.392ZM7 13.75a2.5 2.5 0 1 0 0 5.001a2.5 2.5 0 0 0 0-5.001Zm10-1.5a4 4 0 1 0 0 8a4 4 0 0 0 0-8Zm-.957 1.69a2.5 2.5 0 1 1 1.914 4.62a2.5 2.5 0 0 1-1.914-4.62Z"
-                      clip-rule="evenodd"
-                    /></svg
-                  >
-                {:then icon}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 {icon.width} {icon.height}"
-                    class="re-element-icon"
-                    ><path
-                      fill="currentColor"
-                      fill-rule="evenodd"
-                      d={icon.path}
-                      clip-rule="evenodd"
-                    /></svg
-                  >
-                {:catch e}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    class="re-element-icon"
-                    ><path
-                      fill="currentColor"
-                      fill-rule="evenodd"
-                      d="M10.47 3.554a4 4 0 1 1 3.06 7.391a4 4 0 0 1-3.06-7.39ZM12 4.75a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5Zm-6.53 7.805a4 4 0 1 1 3.061 7.391a4 4 0 0 1-3.062-7.392ZM7 13.75a2.5 2.5 0 1 0 0 5.001a2.5 2.5 0 0 0 0-5.001Zm10-1.5a4 4 0 1 0 0 8a4 4 0 0 0 0-8Zm-.957 1.69a2.5 2.5 0 1 1 1.914 4.62a2.5 2.5 0 0 1-1.914-4.62Z"
-                      clip-rule="evenodd"
-                    /></svg
-                  >
-                {/await}
+        <!-- {#each Object.entries(data.widgets) as [category, widgets]} -->
+        <button class="re-panel-heading re-panel-category-title">
+          <span>{"category"}</span>
+        </button>
+        <ul class="re-panel-elements-list">
+          {#each Object.values(widgets) as widget}
+            <li
+              class="re-element-wrapper"
+              draggable="true"
+              on:dragstart={(e) => selectedElementChannel.set(widget)}
+            >
+              {#await widget.icon}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  class="re-element-icon"
+                  ><path
+                    fill="currentColor"
+                    fill-rule="evenodd"
+                    d="M10.47 3.554a4 4 0 1 1 3.06 7.391a4 4 0 0 1-3.06-7.39ZM12 4.75a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5Zm-6.53 7.805a4 4 0 1 1 3.061 7.391a4 4 0 0 1-3.062-7.392ZM7 13.75a2.5 2.5 0 1 0 0 5.001a2.5 2.5 0 0 0 0-5.001Zm10-1.5a4 4 0 1 0 0 8a4 4 0 0 0 0-8Zm-.957 1.69a2.5 2.5 0 1 1 1.914 4.62a2.5 2.5 0 0 1-1.914-4.62Z"
+                    clip-rule="evenodd"
+                  /></svg
+                >
+              {:then icon}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 {icon.width} {icon.height}"
+                  class="re-element-icon"
+                  ><path
+                    fill="currentColor"
+                    fill-rule="evenodd"
+                    d={icon.path}
+                    clip-rule="evenodd"
+                  /></svg
+                >
+              {:catch e}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  class="re-element-icon"
+                  ><path
+                    fill="currentColor"
+                    fill-rule="evenodd"
+                    d="M10.47 3.554a4 4 0 1 1 3.06 7.391a4 4 0 0 1-3.06-7.39ZM12 4.75a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5Zm-6.53 7.805a4 4 0 1 1 3.061 7.391a4 4 0 0 1-3.062-7.392ZM7 13.75a2.5 2.5 0 1 0 0 5.001a2.5 2.5 0 0 0 0-5.001Zm10-1.5a4 4 0 1 0 0 8a4 4 0 0 0 0-8Zm-.957 1.69a2.5 2.5 0 1 1 1.914 4.62a2.5 2.5 0 0 1-1.914-4.62Z"
+                    clip-rule="evenodd"
+                  /></svg
+                >
+              {/await}
 
-                <div class="re-element-title-wrapper">
-                  <span>{widget.name}</span>
-                </div>
-              </li>
-            {/each}
-          </ul>
-        {/each}
+              <div class="re-element-title-wrapper">
+                <span>{widget.name}</span>
+              </div>
+            </li>
+          {/each}
+        </ul>
+        <!-- {/each} -->
       {/if}
     </div>
     <div class="re-panel-elements-bottom">

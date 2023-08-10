@@ -11,3 +11,6 @@ export const currentEditorView = writable(undefined);
 
 /** @type {WritableAny} */
 export const selectedElementChannel = writable(null);
+
+/** @type {WritableAny} */
+export const widgetsMap = writable(null);

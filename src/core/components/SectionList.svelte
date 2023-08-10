@@ -2,6 +2,8 @@
   import { onMount } from "svelte";
   import BaseDropWidget from "./base/BaseDropWidget.svelte";
   import BaseWidget from "./base/BaseWidget.svelte";
+  import { selectedElementChannel } from "../stores";
+  import { get } from "svelte/store";
 
   /**
    * @type {any[]}
@@ -36,10 +38,14 @@
    * @param {CustomEvent} event
    */
   const handleDropped = (event, index = -1) => {
+    const selectedElement = get(selectedElementChannel);
+    console.warn(selectedElement);
+
     const newWidget = {
       name: `${name}-child-${children.length}`,
-      data: event.detail.element.default,
-      meta: event.detail.element.meta,
+      path: selectedElement.path,
+      category: selectedElement.category,
+      meta: "event.detail.element.meta",
       config: { dummy_val: "ChangeMe" },
     };
     if (index >= 0) {
@@ -61,17 +67,30 @@
   </div>
 
   <div class="re-container">
+    {#await import("../widgets/Heading.svelte")}
+      loading svelte...
+    {:then Heading}
+      <Heading.default title="import direct inline" />
+    {/await}
+
     {#each children as child, i (i)}
-      <div>
-        <span>{i}</span>
+      <div data-index={i}>
         <BaseDropWidget
           on:dropped={(e) => {
             console.log(i);
             handleDropped(e, i);
           }}
+          mini={true}
           bind:visible
         />
-        <div class="re-element">{JSON.stringify(child)}</div>
+        <div class="re-element">
+          <!-- {JSON.stringify(child)} -->
+          {#await import(child.path)}
+            loading ...
+          {:then Child}
+            <Child.default />
+          {/await}
+        </div>
       </div>
     {/each}
     <BaseDropWidget on:dropped={handleDropped} bind:visible />

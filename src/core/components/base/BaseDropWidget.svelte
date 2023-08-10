@@ -8,6 +8,7 @@
   const dispatch = createEventDispatcher();
 
   export let visible = false;
+  export let mini = false;
 
   /**
    * @param {any} event - The `cms_edit` custom event
@@ -44,7 +45,7 @@
 </script>
 
 {#if visible}
-  <div class="re-add-new-widget">
+  <div class="re-add-new-widget" class:mini>
     <div
       class="re-add-section-inner"
       class:hovering={/*hoveringOverBasket === basket.name*/ false}
@@ -72,6 +73,11 @@
     position: relative;
   }
 
+  .mini .re-add-section-inner {
+    margin: 5px 0;
+    padding: 7.5px 0;
+  }
+
   .re-add-section-inner {
     border: 2px dashed var(--e-a-border-color-bold);
     background-color: hsla(0, 0%, 100%, 0.5);
@@ -83,11 +89,19 @@
     flex-grow: 1;
   }
 
+  .mini .re-add-new-call {
+    gap: 5px;
+  }
+
   .re-add-new-call {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 5px;
+  }
+
+  .mini .re-add-section-drag-title {
+    display: none;
   }
 
   .re-add-section-drag-title {

@@ -39,6 +39,38 @@ async function getIcon(name) {
   return eicons[name] || eicons["warning"];
 }
 
+export async function getWidgetsMap() {
+  /**
+   * @type {Record<string, any>}
+   */
+  // @ts-ignore
+  const files = import.meta.glob("/src/core/widgets/*.svelte");
+
+  /**
+   * @type {Record<string, any>}
+   */
+  let widgetsMap = {};
+  console.log(files);
+
+  for await (const filePath of Object.keys(files)) {
+    console.log(filePath);
+    const module = await import(filePath);
+    console.log(module);
+    const { name, icon, category } = module.meta;
+
+    widgetsMap[name] = {
+      path: filePath,
+      name,
+      category,
+      icon: getIcon(icon),
+      // Add other metadata properties you need here
+    };
+  }
+
+  console.log(widgetsMap);
+  return widgetsMap;
+}
+
 export async function getAllWidgets() {
   /**
    * @type {Record<string, () => Promise<WidgetModule>>}
@@ -46,8 +78,12 @@ export async function getAllWidgets() {
   // @ts-ignore
   const files = import.meta.glob("../widgets/*.svelte");
 
-  const imports = Object.values(files).map((file) => file());
+  console.log("files");
+  console.log(files);
+
+  const imports = Object.keys(files).map(async (file) => await import(file));
   const componentsData = await Promise.all(imports);
+  console.log(componentsData);
 
   const componentDataCategory = componentsData.map((componentData) => {
     return {
@@ -77,5 +113,6 @@ export async function getAllWidgets() {
 
   //   console.log(await categories["category-one"][0].icon);
 
-  return categories;
+  //   return categories;
+  return componentsData;
 }
