@@ -100,7 +100,11 @@ const cms = locals.cms;
         </p>
       </RTBlock>
 
-      <SectionList name="sectionsListOne" client:visible />
+      <SectionList
+        name="sectionsListOne"
+        children={cms.kv.get("__sect_sectionsListOne")}
+        client:visible
+      />
 
       <DropWidgetZone client:load />
     </main>

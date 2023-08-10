@@ -8,14 +8,45 @@
   /**
    * @type {any[]}
    */
-  let children = [];
+  export let children = [];
   export let name = "section";
 
   let unsavedChanges = false;
 
-  const fetchValue = async () => {};
+  const fetchValue = async () => {
+    if (unsavedChanges) {
+      console.log("TODO: warn about data loss");
+      unsavedChanges = false;
+    }
+    try {
+      const response = await fetch(`/cms/api/sect/${name}`);
+      const data = await response.json();
+      children = data.value;
+    } catch (error) {
+      console.error("Error fetching initial value:", error);
+    }
+  };
 
-  const updateValue = async () => {};
+  const updateValue = async () => {
+    try {
+      const response = await fetch(`/cms/api/sect/${name}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ value: children }),
+      });
+
+      if (response.ok) {
+        unsavedChanges = false;
+        // content = realContent;
+      }
+
+      // Handle the response if needed
+    } catch (error) {
+      console.error("Error updating value:", error);
+    }
+  };
 
   export let visible = false;
 
@@ -67,12 +98,6 @@
   </div>
 
   <div class="re-container">
-    {#await import("../widgets/Heading.svelte")}
-      loading svelte...
-    {:then Heading}
-      <Heading.default title="import direct inline" />
-    {/await}
-
     {#each children as child, i (i)}
       <div data-index={i}>
         <BaseDropWidget

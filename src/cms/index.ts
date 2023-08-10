@@ -114,6 +114,13 @@ export default function (options?: any): AstroIntegration {
           entryPoint: "./src/cms/routes/rtf.js",
         });
 
+        injectRoute({
+          // Use Astro’s pattern syntax for dynamic routes.
+          pattern: "/cms/api/sect/[name]",
+          // Use relative path syntax for a local route.
+          entryPoint: "./src/cms/routes/sect.js",
+        });
+
         if (resolvedOptions.bridge) {
           injectScript(
             "page", // before-hydration, head-inline, page, page-ssr
