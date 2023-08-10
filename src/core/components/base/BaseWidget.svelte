@@ -1,18 +1,22 @@
 <script>
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import "../../../styles/editor.css";
 
   export let name = "changeme";
 
   export let editable = false;
 
-  let unsavedChanges = false;
+  export let unsavedChanges = false;
 
   export let content = "editMe";
 
   const fetchValue = async () => {};
 
   const updateValue = async () => {};
+
+  export let addPermitted = true;
+  export let dragPermitted = true;
+  export let deletePermitted = true;
 
   // fetch and updateValue
 
@@ -30,59 +34,101 @@
       window.removeEventListener("cms_edit", handleCmsEditEvent);
     };
   });
+
+  const dispatch = createEventDispatcher();
+
+  /**
+   * @param {MouseEvent} ev
+   */
+  const doDelete = (ev) => {
+    dispatch("elementDelete", ev);
+  };
+  /**
+   * @param {MouseEvent} ev
+   */
+  const doAdd = (ev) => {
+    dispatch("elementAdd", ev);
+  };
+  /**
+   * @param {MouseEvent} ev
+   */
+  const doSelect = (ev) => {
+    dispatch("elementSelect", ev);
+  };
 </script>
 
-<div class:unsavedChanges class="editable">
+<div class:unsavedChanges class:editable>
   {#if editable}
     <div class="re-editor-element-handles">
       <div class="re-editor-element-handle-left"><!-- --></div>
       <div class="re-editor-element-handle-middle">
         <slot name="handle-middle">
           <ul class="re-editor-element-handle-list">
-            <li class="re-editor-element-handle-action">
-              <i>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  ><path
-                    fill="currentColor"
-                    d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
-                  /></svg
+            {#if addPermitted}
+              <li class="re-editor-element-handle-action">
+                <i
+                  on:click={doAdd}
+                  on:keypress={() => {}}
+                  role="button"
+                  tabindex="0"
                 >
-              </i>
-            </li>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    ><path
+                      fill="currentColor"
+                      d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                    /></svg
+                  >
+                </i>
+              </li>
+            {/if}
 
-            <li class="re-editor-element-handle-action">
-              <i>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  ><path
-                    fill="currentColor"
-                    d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2s.9-2 2-2s2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2s-2 .9-2 2s.9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2z"
-                  /></svg
+            {#if dragPermitted}
+              <li class="re-editor-element-handle-action">
+                <i
+                  on:click={doSelect}
+                  on:keypress={() => {}}
+                  role="button"
+                  tabindex="0"
                 >
-              </i>
-            </li>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    ><path
+                      fill="currentColor"
+                      d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2s.9-2 2-2s2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2s-2 .9-2 2s.9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2z"
+                    /></svg
+                  >
+                </i>
+              </li>
+            {/if}
 
-            <li class="re-editor-element-handle-action">
-              <i>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  ><path
-                    fill="currentColor"
-                    d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"
-                  /></svg
+            {#if deletePermitted}
+              <li class="re-editor-element-handle-action">
+                <i
+                  on:click={doDelete}
+                  on:keypress={() => {}}
+                  role="button"
+                  tabindex="0"
                 >
-              </i>
-            </li>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    ><path
+                      fill="currentColor"
+                      d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"
+                    /></svg
+                  >
+                </i>
+              </li>
+            {/if}
           </ul>
         </slot>
       </div>
@@ -111,12 +157,12 @@
 </div>
 
 <style>
-  .editable .re-editor-element-handles {
+  .editable > .re-editor-element-handles {
     opacity: 0;
     visibility: hidden;
   }
 
-  .editable:hover .re-editor-element-handles {
+  .editable:hover > .re-editor-element-handles {
     opacity: 1;
     visibility: visible;
   }

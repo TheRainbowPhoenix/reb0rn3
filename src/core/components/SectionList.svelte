@@ -85,11 +85,23 @@
     } else {
       children = [...children, newWidget];
     }
+    unsavedChanges = true;
     console.log(event.detail);
+  };
+
+  /**
+   * @param {number} index
+   */
+  const doRemove = (index) => {
+    if (index >= 0 && index < children.length) {
+      children.splice(index, 1);
+      children = [...children];
+      unsavedChanges = true;
+    }
   };
 </script>
 
-<BaseWidget {name}>
+<BaseWidget {name} bind:unsavedChanges>
   <div class="editor" slot="editor">
     <button on:click={fetchValue} title="refresh" aria-label="refresh"
       >🔄</button
@@ -109,12 +121,23 @@
           bind:visible
         />
         <div class="re-element">
-          <!-- {JSON.stringify(child)} -->
-          {#await import(child.path)}
-            loading ...
-          {:then Child}
-            <Child.default />
-          {/await}
+          <BaseWidget
+            name={child.name}
+            addPermitted={false}
+            on:elementDelete={(ev) => {
+              doRemove(i);
+            }}
+            on:elementSelect={(ev) => {
+              console.log(ev);
+            }}
+          >
+            <!-- {JSON.stringify(child)} -->
+            {#await import(child.path)}
+              loading ...
+            {:then Child}
+              <Child.default />
+            {/await}
+          </BaseWidget>
         </div>
       </div>
     {/each}
