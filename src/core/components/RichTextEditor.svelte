@@ -135,9 +135,6 @@
 </script>
 
 <div class:unsavedChanges class="editable">
-  <RteToolbar {editorState} {editorView} />
-  <div class="prosemirror-editor" bind:this={prosemirrorNode} />
-
   <div class="editor">
     <input
       type="text"
@@ -152,6 +149,9 @@
     >
     <button on:click={updateValue} title="save" aria-label="save">💾</button>
   </div>
+  <RteToolbar {editorState} {editorView} />
+
+  <div class="prosemirror-editor" bind:this={prosemirrorNode} />
 
   {@html realContent}
 </div>

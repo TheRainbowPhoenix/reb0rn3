@@ -18,17 +18,8 @@
     editorState = value?.state;
   });
 
-  // MARK
-  import { toggleMark } from "prosemirror-commands";
   import { currentEditorView } from "../stores";
   import PmMark from "../editor/PmMark.svelte";
-
-  $: schema = editorState?.schema;
-  $: markType = schema?.marks["strong"];
-
-  $: command = toggleMark(markType);
-  // @ts-ignore
-  $: disabled = !markType || !command(editorState, null);
 
   const doSave = () => {
     console.log("TODO: save broadcast");
@@ -38,6 +29,7 @@
 <div class="editor toolbar">
   <PmMark {editorView} {editorState} type="strong">🅱️old</PmMark>
   <PmMark {editorView} {editorState} type="em">Em</PmMark>
+  <PmMark {editorView} {editorState} type="code">Code</PmMark>
   <div class="spacer" />
   <!-- <button on:click={doSave}>💾</button> -->
 </div>
