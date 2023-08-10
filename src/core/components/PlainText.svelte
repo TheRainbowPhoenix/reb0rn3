@@ -1,15 +1,14 @@
 <script>
+  export let name = "changeme";
   export let editable = true;
-  export let content;
+  export let content = "";
   export let multiLine = false;
 </script>
 
-{#if editable}
-  {#await import("./PlainTextEditor.svelte")}
-    {@html content}
-  {:then PlainTextEditor}
-    <PlainTextEditor.default {multiLine} bind:content />
-  {/await}
-{:else}
-  {@html content}
-{/if}
+{#await import("./PlainTextEditor.svelte")}
+  {content} - load
+{:then PlainTextEditor}
+  <PlainTextEditor.default {multiLine} bind:content bind:name />
+{:catch error}
+  <p style="color: red">{error.message}</p>
+{/await}

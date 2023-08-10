@@ -3,7 +3,14 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import PlainText from "../core/components/PlainText.svelte";
+import MyCounter from "../components/MyCounter.svelte";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+// import { a as AReff } from "./r/a.re3";
+
+const locals = Astro.locals;
+
+const cms = locals.cms;
 ---
 
 <!DOCTYPE html>
@@ -13,9 +20,11 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
   </head>
   <body>
     <Header title={SITE_TITLE} />
+    <MyCounter name="number" count={cms.kv.get("number")} client:load />
+    <!-- <p>{JSON.stringify(locals)} - {cms || "cms KO"} - {cms.kv.get("number")}</p> -->
     <main>
       <h1>🧑‍🚀 Hello, Astronaut!</h1>
-      <PlainText content="<p>Change this text !</p>" client:visible />
+      <PlainText name="changeme" content={cms.kv.get("changeme")} client:load />
       <p>
         Welcome to the official <a href="https://astro.build/">Astro</a> blog starter
         template. This template serves as a lightweight, minimally-styled starting

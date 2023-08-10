@@ -1,15 +1,14 @@
 <script>
-  import { onMount, onDestroy } from "svelte";
+  import { onMount } from "svelte";
 
-  export let content = "";
-  export let multiLine = false;
-  export let name = "changeme";
+  export let name = "number";
+  export let count = 0;
 
   const fetchValue = async () => {
     try {
       const response = await fetch(`/cms/api/kv/${name}`);
       const data = await response.json();
-      content = data.value;
+      count = data.value;
     } catch (error) {
       console.error("Error fetching initial value:", error);
     }
@@ -22,7 +21,7 @@
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ value: content }),
+        body: JSON.stringify({ value: count }),
       });
 
       // Handle the response if needed
@@ -30,16 +29,22 @@
       console.error("Error updating value:", error);
     }
   };
+
+  // onMount(fetchValue);
 </script>
 
 <div>
-  <div>
-    <input type="text" bind:value={content} />
-    <button on:click={fetchValue} aria-label="refresh">🔄</button>
-    <button on:click={updateValue} aria-label="save">💾</button>
-  </div>
-
-  <p>
-    {content}
-  </p>
+  <h1>SSR Counter</h1>
+  <p>Value: {count}</p>
+  <button on:click={() => (count += 1)} aria-label="increment">➕</button>
+  <button on:click={() => (count -= 1)} aria-label="decrement">➖</button>
+  <button on:click={updateValue} aria-label="save">💾</button>
+  <button on:click={fetchValue} aria-label="refresh">🔄</button>
 </div>
+
+<style>
+  div {
+    text-align: center;
+    margin: 2rem;
+  }
+</style>
