@@ -61,7 +61,7 @@
     <button on:click={updateValue} title="save" aria-label="save">💾</button>
   </div>
 
-  {realContent}
+  {@html realContent}
 </div>
 
 <style>

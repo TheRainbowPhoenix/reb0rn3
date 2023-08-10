@@ -1,0 +1,10 @@
+---
+import RTFFragment from "./RTFFragment.svelte";
+const html = await Astro.slots.render("default");
+
+const { name, callback, content } = Astro.props;
+---
+
+<RTFFragment name={name} callback={callback} content={content} client:load>
+  {content ? <Fragment set:html={content} /> : <Fragment set:html={html} />}
+</RTFFragment>
