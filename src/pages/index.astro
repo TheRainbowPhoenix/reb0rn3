@@ -24,7 +24,7 @@ const cms = locals.cms;
     <EditorToolbar client:load />
     <MyCounter name="number" count={cms.kv.get("number")} client:load />
     <!-- <p>{JSON.stringify(locals)} - {cms || "cms KO"} - {cms.kv.get("number")}</p> -->
-    <main>
+    <main class="site">
       <h1>
         <PlainText name="title" content={cms.kv.get("title")} client:load />
       </h1>

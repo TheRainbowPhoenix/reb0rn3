@@ -91,4 +91,59 @@
   --e-a-transition-hover: all 0.3s;
   --e-a-popover-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
   --e-a-dropdown-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+
+  --scrollbar-thin-thumb: #202225;
+  --scrollbar-thin-track: transparent;
+  --scrollbar-auto-thumb: #202225;
+  --scrollbar-auto-track: hsl(
+    210,
+    calc(var(--saturation-factor, 1) * 9.8%),
+    20%
+  );
+  --scrollbar-auto-scrollbar-color-thumb: #202225;
+  --scrollbar-auto-scrollbar-color-track: #2f3136;
+}
+
+.thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.thin::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+.thin::-webkit-scrollbar-thumb {
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  background-color: var(--scrollbar-thin-thumb);
+  min-height: 40px;
+}
+
+.fade::-webkit-scrollbar-thumb,
+.fade::-webkit-scrollbar-track {
+  visibility: hidden;
+}
+
+.fade:hover::-webkit-scrollbar-thumb,
+.fade:hover::-webkit-scrollbar-track {
+  visibility: visible;
+}
+
+.thin::-webkit-scrollbar-track {
+  border-color: var(--scrollbar-thin-track);
+  background-color: var(--scrollbar-thin-track);
+  border: 2px solid var(--scrollbar-thin-track);
+}
+
+.thin,
+.thin.fade:hover,
+.thin.scrolling {
+  scrollbar-color: var(--scrollbar-thin-thumb) var(--scrollbar-thin-track);
+}
+
+ol,
+ul {
+  list-style: none;
 }
