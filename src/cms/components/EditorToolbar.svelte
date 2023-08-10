@@ -1,4 +1,6 @@
 <script>
+  import "../../styles/editor.css";
+
   let isCmsEditOn = false;
 
   const toggleCmsEdit = () => {

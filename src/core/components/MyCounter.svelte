@@ -63,22 +63,28 @@
   <h1>SSR Counter</h1>
   <p>Value: {count}</p>
   {#if editable}
-    <button
-      on:click={() => {
-        count += 1;
-        unsavedChanges = true;
-      }}
-      aria-label="increment">➕</button
-    >
-    <button
-      on:click={() => {
-        count -= 1;
-        unsavedChanges = true;
-      }}
-      aria-label="decrement">➖</button
-    >
-    <button on:click={updateValue} aria-label="save">💾</button>
-    <button on:click={fetchValue} aria-label="refresh">🔄</button>
+    <div class="editor">
+      <button
+        on:click={() => {
+          count += 1;
+          unsavedChanges = true;
+        }}
+        title="increment"
+        aria-label="increment">➕</button
+      >
+      <button
+        on:click={() => {
+          count -= 1;
+          unsavedChanges = true;
+        }}
+        title="decrement"
+        aria-label="decrement">➖</button
+      >
+      <button on:click={updateValue} title="save" aria-label="save">💾</button>
+      <button on:click={fetchValue} title="refresh" aria-label="refresh"
+        >🔄</button
+      >
+    </div>
   {/if}
 </div>
 
@@ -89,7 +95,29 @@
   }
 
   .unsavedChanges {
-    border: 2px solid hsl(54, 100%, 49%);
+    box-shadow: hsl(54, 100%, 49%) 0px 0px 0px 2px;
+    /* border: 2px solid hsl(54, 100%, 49%); */
     background-color: hsla(54, 100%, 49%, 0.2);
+  }
+
+  .editor button {
+    height: auto;
+    line-height: 24px;
+    font-size: 10px;
+    color: var(--e-a-color-txt);
+    border-color: var(--e-a-border-color-bold);
+    background-color: var(--e-a-bg-default);
+    border: var(--e-a-border-bold);
+    border-radius: var(--e-a-border-radius);
+    min-height: 0;
+    cursor: pointer;
+  }
+
+  .editor button:hover {
+    background-color: var(--e-a-bg-hover);
+  }
+
+  .editor button:active {
+    background-color: var(--e-a-bg-active);
   }
 </style>

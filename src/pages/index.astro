@@ -25,7 +25,9 @@ const cms = locals.cms;
     <MyCounter name="number" count={cms.kv.get("number")} client:load />
     <!-- <p>{JSON.stringify(locals)} - {cms || "cms KO"} - {cms.kv.get("number")}</p> -->
     <main>
-      <h1>🧑‍🚀 Hello, Astronaut!</h1>
+      <h1>
+        <PlainText name="title" content={cms.kv.get("title")} client:load />
+      </h1>
       <PlainText name="changeme" content={cms.kv.get("changeme")} client:load />
       <p>
         Welcome to the official <a href="https://astro.build/">Astro</a> blog starter
