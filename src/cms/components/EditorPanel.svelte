@@ -63,7 +63,6 @@
     opacity: 0;
     animation: suspense 0.25s 0.025s linear forwards;
   }
-
   .re-panel {
     /* position: fixed; */
     left: 0;
@@ -130,6 +129,18 @@
 
     to {
       transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .re-panel {
+      width: 0;
+      max-width: 0;
+      min-width: 0;
+    }
+
+    #re-panel-inner {
+      display: none;
     }
   }
 </style>

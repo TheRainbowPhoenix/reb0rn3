@@ -59,7 +59,7 @@
   // onMount(fetchValue);
 </script>
 
-<div class:unsavedChanges>
+<div class:unsavedChanges class="counter">
   <h1>SSR Counter</h1>
   <p>Value: {count}</p>
   {#if editable}
@@ -89,6 +89,10 @@
 </div>
 
 <style>
+  .counter {
+    text-align: center;
+  }
+
   div {
     text-align: center;
     margin: 2rem;
