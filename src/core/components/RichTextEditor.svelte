@@ -2,6 +2,24 @@
   import "../../styles/editor.css";
   import { onMount, onDestroy } from "svelte";
 
+  // @ts-ignore
+  import { EditorState, Plugin } from "prosemirror-state";
+  import { EditorView } from "prosemirror-view";
+  // @ts-ignore
+  import { history } from "prosemirror-history";
+  // @ts-ignore
+  import { keymap } from "prosemirror-keymap";
+  // @ts-ignore
+  import { baseKeymap } from "prosemirror-commands";
+  import { fromHTML, toHTML } from "../editor/pmParsers";
+  import { currentEditorView } from "../stores";
+  import {
+    multiLineRichTextSchema,
+    singleLineRichTextSchema,
+  } from "../editor/pmSchemas";
+  import { buildInputRules } from "../editor/pmInputRules";
+  import RteToolbar from "./RTEToolbar.svelte";
+
   export let content = "";
   let realContent = content;
   export let prefix = "";
@@ -9,6 +27,37 @@
   export let multiLine = false;
   export let name = "changeme";
   let unsavedChanges = false;
+
+  // ProseMirror
+  /**
+   * @type {any}
+   */
+  let prosemirrorNode;
+  /**
+   * @type {any}
+   */
+  let editorView;
+  /**
+   * @type {any}
+   */
+  let editorState;
+
+  $: schema = multiLineRichTextSchema;
+
+  $: {
+    const doc = fromHTML(schema, realContent);
+    editorState = EditorState.create({
+      doc,
+      schema,
+      plugins: [
+        buildInputRules(schema),
+        // keymap(buildKeymap(schema)),
+        keymap(baseKeymap),
+        history(),
+        onUpdatePlugin,
+      ],
+    });
+  }
 
   const fetchValue = async () => {
     if (unsavedChanges) {
@@ -44,15 +93,58 @@
       console.error("Error updating value:", error);
     }
   };
+
+  /**
+   * @param {any} transaction
+   */
+  function dispatchTransaction(transaction) {
+    // @ts-ignore
+    const editorState = this.state.apply(transaction);
+    // @ts-ignore
+    this.updateState(editorState);
+    if (transaction.docChanged) {
+      realContent = toHTML(editorState);
+      unsavedChanges = true;
+    }
+    this.state = editorState;
+  }
+
+  const onUpdatePlugin = new Plugin({
+    view() {
+      return {
+        update(updatedView) {
+          currentEditorView.set(updatedView);
+        },
+      };
+    },
+  });
+
+  onMount(() => {
+    editorView = new EditorView(prosemirrorNode, {
+      state: editorState,
+      dispatchTransaction,
+    });
+    currentEditorView.set(editorView);
+  });
+
+  onDestroy(() => {
+    if (editorView?.destroy) {
+      editorView.destroy();
+    }
+  });
 </script>
 
 <div class:unsavedChanges class="editable">
+  <RteToolbar {editorState} {editorView} />
+  <div class="prosemirror-editor" bind:this={prosemirrorNode} />
+
   <div class="editor">
     <input
       type="text"
       bind:value={realContent}
       on:change={() => {
         unsavedChanges = true;
+        editorView?.updateState(editorState);
       }}
     />
     <button on:click={fetchValue} title="refresh" aria-label="refresh"
@@ -65,6 +157,12 @@
 </div>
 
 <style>
+  :global(#prosemirror-editor .ProseMirror) {
+    outline: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
   .unsavedChanges {
     box-shadow: hsl(54, 100%, 49%) 0px 0px 0px 2px;
     /* border: 2px solid hsl(54, 100%, 49%); */
@@ -72,7 +170,7 @@
   }
 
   .editable > div {
-    line-height: 0;
+    /* line-height: 0; */
     display: flex;
     gap: 6px;
     margin-bottom: 8px;
