@@ -1,0 +1,12 @@
+---
+import { extractFilename } from "../../helpers/url";
+import MiniEditor from "../../mini-editor/MiniEditor.svelte";
+
+const myURL = extractFilename(import.meta.url);
+
+const { get } = await import(`./${myURL}.json.js`);
+const data = await get();
+---
+
+<p>{JSON.stringify(data)}</p>
+<p>{JSON.stringify(myURL)}</p>
