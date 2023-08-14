@@ -1,0 +1,36 @@
+---
+const dynamicZoneComponents = ["Content"];
+
+const Card = (await import(`../../blocs/${dynamicZoneComponents[0]}.astro`))
+  .default;
+---
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <Card />
+
+    <script is:inline>
+      const files = import.meta.glob("/src/core/widgets/*.svelte");
+
+      var widgetsList = [];
+
+      for await (const filePath of Object.keys(files)) {
+        console.log(filePath);
+        const module = await import(filePath);
+        widgetsList.push(module);
+      }
+    </script>
+
+    <style>
+      body {
+        font-family: Inter var, ui-sans-serif, system-ui, -apple-system,
+          BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans,
+          sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol,
+          "Noto Color Emoji";
+      }
+    </style>
+  </body>
+</html>

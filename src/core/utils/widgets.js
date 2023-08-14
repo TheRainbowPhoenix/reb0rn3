@@ -71,6 +71,38 @@ export async function getWidgetsMap() {
   return widgetsMap;
 }
 
+export async function getWidgetsToBuilder() {
+  /**
+   * @type {Record<string, any>}
+   */
+  // @ts-ignore
+  const files = import.meta.glob("/src/core/widgets/*.svelte");
+
+  /**
+   * @type {Record<string, any>}
+   */
+  let widgetsMap = {};
+  console.log(files);
+
+  for await (const filePath of Object.keys(files)) {
+    console.log(filePath);
+    const module = await import(filePath);
+    console.log(module);
+    const { name, icon, category } = module.meta;
+
+    widgetsMap[name] = {
+      path: filePath,
+      name,
+      category,
+      icon: getIcon(icon),
+      // Add other metadata properties you need here
+    };
+  }
+
+  console.log(widgetsMap);
+  return widgetsMap;
+}
+
 export async function getAllWidgets() {
   /**
    * @type {Record<string, () => Promise<WidgetModule>>}
