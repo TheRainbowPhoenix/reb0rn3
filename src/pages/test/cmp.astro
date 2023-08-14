@@ -3,6 +3,10 @@ const dynamicZoneComponents = ["Content"];
 
 const Card = (await import(`../../blocs/${dynamicZoneComponents[0]}.astro`))
   .default;
+
+const Pages = (await import("../../blocs/CTA.astro")).default;
+const cmps = import.meta.glob("../../blocs/*.astro", { eager: true });
+const keys = Object.keys(cmps);
 ---
 
 <html>
@@ -11,6 +15,10 @@ const Card = (await import(`../../blocs/${dynamicZoneComponents[0]}.astro`))
   </head>
   <body>
     <Card />
+
+    <Pages />
+
+    {JSON.stringify(keys || {})}
 
     <script is:inline>
       const files = import.meta.glob("/src/core/widgets/*.svelte");
