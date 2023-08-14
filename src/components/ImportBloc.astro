@@ -1,0 +1,26 @@
+---
+export interface Props {
+  cmp: string;
+}
+
+const { cmp } = Astro.props;
+
+const cmps = import.meta.glob("../blocs/*.astro", { eager: true });
+const paths = Object.keys(cmps);
+
+const matchedPath = paths.find((path) => path.includes(cmp)) || null;
+
+console.log(paths);
+console.log(matchedPath);
+
+var Component;
+if (matchedPath) {
+  // @ts-ignore
+  Component = (await import(matchedPath)).default;
+} else {
+  Component = (await import(`../blocs/CTA.astro`)).default;
+}
+---
+
+<div>{cmp}</div>
+<Component />

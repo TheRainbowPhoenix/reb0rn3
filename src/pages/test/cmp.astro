@@ -1,12 +1,45 @@
 ---
-const dynamicZoneComponents = ["Content"];
+const pageModel = {
+  blocs: [
+    {
+      name: "CTA",
+    },
+    {
+      name: "Content",
+    },
+    {
+      name: "Feature",
+    },
+    {
+      name: "Content",
+    },
+    {
+      name: "Newsletter",
+    },
+  ],
+};
 
-const Card = (await import(`../../blocs/${dynamicZoneComponents[0]}.astro`))
-  .default;
+import ImportBloc from "../../components/ImportBloc.astro";
 
-const Pages = (await import("../../blocs/CTA.astro")).default;
-const cmps = import.meta.glob("../../blocs/*.astro", { eager: true });
-const keys = Object.keys(cmps);
+// const importElements = [...new Set(pageModel.blocs.map((bloc) => bloc.name))];
+// const mapArray = await Promise.all(
+//   importElements.map(async (item) => ({
+//     [item]: (await import(`../../blocs/${item}.astro`)).default,
+//   }))
+// );
+
+// @ts-ignore
+// const blocsList = pageModel.blocs.map(({ name }) => mapArray[name]);
+
+// const dynamicZoneComponents = ["Content"];
+
+// const Card = (await import(`../../blocs/${dynamicZoneComponents[0]}.astro`))
+//   .default;
+
+// const Pages = (await import("../../blocs/CTA.astro")).default;
+
+// const cmps = import.meta.glob("../../blocs/*.astro", { eager: true });
+// const keys = Object.keys(cmps);
 ---
 
 <html>
@@ -14,11 +47,21 @@ const keys = Object.keys(cmps);
     <meta charset="utf-8" />
   </head>
   <body>
-    <Card />
+    <!-- <Card /> -->
 
-    <Pages />
+    <!-- <Pages /> -->
 
-    {JSON.stringify(keys || {})}
+    {
+      pageModel.blocs.map((b) => (
+        <p>
+          <ImportBloc cmp={b.name} />
+        </p>
+      ))
+    }
+
+    <!-- {JSON.stringify(keys || {})} -->
+
+    <!-- <Content /> -->
 
     <script is:inline>
       const files = import.meta.glob("/src/core/widgets/*.svelte");
