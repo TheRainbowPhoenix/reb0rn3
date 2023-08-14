@@ -2,19 +2,24 @@
 const pageModel = {
   blocs: [
     {
-      name: "CTA",
+      name: "cta",
+      props: { title: "Title CTA TODO" },
     },
     {
-      name: "Content",
+      name: "content",
+      props: { title: "Title Content TODO" },
     },
     {
-      name: "Feature",
+      name: "feature",
+      props: {},
     },
     {
-      name: "Content",
+      name: "content",
+      props: { title: "Title Content TODO 2 !" },
     },
     {
-      name: "Newsletter",
+      name: "newsletter",
+      props: {},
     },
   ],
 };
@@ -54,7 +59,7 @@ import ImportBloc from "../../components/ImportBloc.astro";
     {
       pageModel.blocs.map((b) => (
         <p>
-          <ImportBloc cmp={b.name} />
+          <ImportBloc cmp={b.name} props={b.props} />
         </p>
       ))
     }

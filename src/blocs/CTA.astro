@@ -1,10 +1,16 @@
 ---
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
 ---
 
 <div class="cta">
   <div class="cta-container">
     <h2 class="cta-title">
-      Boost your productivity.<br />Start using our app today.
+      {title}<br />Start using our app today.
     </h2>
     <div class="cta-actions">
       <a href="#" class="cta-action-primary">Get started</a><a

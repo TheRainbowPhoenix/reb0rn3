@@ -1,26 +1,57 @@
 ---
 export interface Props {
   cmp: string;
+  props: any;
 }
 
-const { cmp } = Astro.props;
-
-const cmps = import.meta.glob("../blocs/*.astro", { eager: true });
-const paths = Object.keys(cmps);
-
-const matchedPath = paths.find((path) => path.includes(cmp)) || null;
-
-console.log(paths);
-console.log(matchedPath);
+const { cmp, props } = Astro.props;
 
 var Component;
-if (matchedPath) {
-  // @ts-ignore
-  Component = (await import(matchedPath)).default;
-} else {
-  Component = (await import(`../blocs/CTA.astro`)).default;
+
+// TODO: generate this maybe ??
+import CTA from "../blocs/CTA.astro";
+import Content from "../blocs/Content.astro";
+import Feature from "../blocs/Feature.astro";
+import Newsletter from "../blocs/Newsletter.astro";
+import Error from "../blocs/Error.astro";
+
+switch (cmp) {
+  case "cta":
+    Component = CTA;
+    break;
+  case "content":
+    Component = Content;
+    break;
+  case "feature":
+    Component = Feature;
+    break;
+  case "newsletter":
+    Component = Newsletter;
+    break;
+
+  default:
+    Component = Error;
+    break;
 }
+
+// END-TODO
+
+// const cmps = import.meta.glob("../blocs/*.astro", { eager: true });
+// const paths = Object.keys(cmps);
+
+// const matchedPath = paths.find((path) => path.includes(cmp)) || null;
+
+// console.log(paths);
+// console.log(matchedPath);
+
+// if (matchedPath) {
+//   // @ts-ignore
+//   Component = (await import(matchedPath)).default;
+// } else {
+//   Component = (await import(`../blocs/CTA.astro`)).default;
+// }
+// props = { title: "Title TODO" };
 ---
 
 <div>{cmp}</div>
-<Component />
+<Component {...props} />
